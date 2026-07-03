@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Pro V3 - Quản lý KEY</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #0a0a0f;
+            font-family: 'Segoe UI', 'Roboto', sans-serif;
+            padding: 16px;
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+        }
+        .admin-panel {
+            max-width: 650px;
+            width: 100%;
+            background: linear-gradient(145deg, #12121a, #1a1a2e);
+            border-radius: 32px;
+            padding: 24px 20px 32px;
+            border: 1px solid #2a2a3e;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.8);
+            margin-top: 10px;
+        }
+        .header {
+            text-align: center;
+            padding-bottom: 16px;
+            border-bottom: 1px solid #2a2a3e;
+            margin-bottom: 20px;
+        }
+        .header h1 {
+            font-size: 24px;
+            font-weight: 700;
+            background: linear-gradient(90deg, #ff8800, #ffcc00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .header .sub { color: #666699; font-size: 12px; margin-top: 2px; }
+        .header .badge-pro {
+            display: inline-block;
+            background: linear-gradient(90deg, #ff4444, #ff8800);
+            padding: 2px 14px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+            color: #fff;
+            margin-top: 4px;
+            -webkit-text-fill-color: #fff;
+        }
+
+        /* FREE KEY */
+        .free-section {
+            background: #0f0f18;
+            border-radius: 16px;
+            padding: 16px;
+            border: 1px solid #1f1f33;
+            margin-bottom: 20px;
+        }
+        .free-section .title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #00ff88;
+            margin-bottom: 10px;
+        }
+        .free-section .free-key-display {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #0a0a12;
+            padding: 10px 16px;
+            border-radius: 12px;
+            border: 1px solid #1f1f33;
+        }
+        .free-section .free-key-display .key {
+            font-family: 'Courier New', monospace;
+            font-size: 20px;
+            font-weight: 700;
+            color: #00ff88;
+            letter-spacing: 2px;
+        }
+        .free-section .free-key-display .copy-btn {
+            background: rgba(0, 255, 136, 0.15);
+            border: 1px solid #00ff88;
+            color: #00ff88;
+            padding: 4px 14px;
+            border-radius: 60px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+        .free-section .free-key-display .copy-btn:hover {
+            background: rgba(0, 255, 136, 0.3);
+        }
+        .free-section .free-expiry {
+            margin-top: 6px;
+            font-size: 12px;
+            color: #666699;
+            display: flex;
+            justify-content: space-between;
+        }
+        .free-section .free-expiry .time {
+            color: #00ff88;
+            font-weight: 600;
+            font-family: 'Courier New', monospace;
+        }
+
+        /* TABS */
+        .tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+        .tabs .tab {
+            flex: 1;
+            padding: 10px;
+            text-align: center;
+            border-radius: 16px;
+            cursor: pointer;
+            transition: 0.3s;
+            font-weight: 700;
+            font-size: 13px;
+            border: 1px solid #1f1f33;
+            background: #0f0f18;
+            color: #666699;
+        }
+        .tabs .tab.active {
+            border-color: #ff8800;
+            background: rgba(255, 136, 0, 0.15);
+            color: #ff8800;
+        }
+        .tabs .tab .count-badge {
+            background: rgba(255, 136, 0, 0.2);
+            color: #ff8800;
+            border-radius: 50%;
+            padding: 0 8px;
+            font-size: 11px;
+            margin-left: 4px;
+        }
+
+        /* TẠO PREM */
+        .create-prem {
+            background: #0f0f18;
+            border-radius: 16px;
+            padding: 16px;
+            border: 1px solid #1f1f33;
+            margin-bottom: 16px;
+        }
+        .create-prem .title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #b0b0d0;
+            margin-bottom: 10px;
+        }
+        .create-prem .row {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        .create-prem .row input[type="text"] {
+            flex: 2;
+            min-width: 100px;
+            background: #0a0a12;
+            border: 1px solid #2a2a44;
+            border-radius: 60px;
+            padding: 10px 14px;
+            color: #ff8800;
+            font-size: 14px;
+            font-weight: 600;
+            outline: none;
+            font-family: 'Courier New', monospace;
+            letter-spacing: 1px;
+            transition: 0.2s;
+        }
+        .create-prem .row input[type="text"]:focus {
+            border-color: #ff8800;
+            box-shadow: 0 0 20px rgba(255, 136, 0, 0.15);
+        }
+        .create-prem .row input[type="text"]::placeholder {
+            color: #444466;
+            font-weight: 400;
+            font-family: 'Segoe UI', sans-serif;
+        }
+        .create-prem .row input[type="number"] {
+            width: 70px;
+            background: #0a0a12;
+            border: 1px solid #2a2a44;
+            border-radius: 60px;
+            padding: 10px 12px;
+            color: #ff8800;
+            font-size: 14px;
+            font-weight: 600;
+            outline: none;
+            text-align: center;
+            font-family: 'Courier New', monospace;
+        }
+        .create-prem .row input[type="number"]:focus {
+            border-color: #ff8800;
+            box-shadow: 0 0 20px rgba(255, 136, 0, 0.15);
+        }
+        .create-prem .row label { color: #8888bb; font-size: 13px; }
+        .create-prem .row .btn-gen {
+            background: linear-gradient(90deg, #ff8800, #ffcc00);
+            border: none;
+            color: #0a0a0f;
+            font-weight: 700;
+            padding: 10px 16px;
+            border-radius: 60px;
+            cursor: pointer;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: 0.2s;
+            white-space: nowrap;
+        }
+        .create-prem .row .btn-gen:hover {
+            transform: scale(1.03);
+            box-shadow: 0 6px 24px rgba(255, 136, 0, 0.3);
+        }
+        .create-prem .row .btn-create {
+            background: linear-gradient(90deg, #ff6600, #ff8800);
+            border: none;
+            color: #fff;
+            font-weight: 700;
+            padding: 10px 18px;
+            border-radius: 60px;
+            cursor: pointer;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: 0.2s;
+            white-space: nowrap;
+        }
+        .create-prem .row .btn-create:hover {
+            transform: scale(1.03);
+            box-shadow: 0 6px 24px rgba(255, 136, 0, 0.3);
+        }
+        .create-prem .row .btn-reset {
+            background: linear-gradient(90deg, #cc0044, #ff2266);
+            border: none;
+            color: #fff;
+            font-weight: 700;
+            padding: 10px 14px;
+            border-radius: 60px;
+            cursor: pointer;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: 0.2s;
+            white-space: nowrap;
+        }
+        .create-prem .row .btn-reset:hover {
+            transform: scale(1.03);
+            box-shadow: 0 6px 24px rgba(200, 0, 50, 0.3);
+        }
+
+        /* DANH SÁCH PREM */
+        .prem-list {
+            background: #0a0a12;
+            border-radius: 16px;
+            padding: 12px;
+            border: 1px solid #1f1f33;
+            max-height: 350px;
+            overflow-y: auto;
+        }
+        .prem-list::-webkit-scrollbar { width: 4px; }
+        .prem-list::-webkit-scrollbar-track { background: #0a0a12; }
+        .prem-list::-webkit-scrollbar-thumb { background: #2a2a44; border-radius: 10px; }
+        .prem-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 12px;
+            border-bottom: 1px solid #1a1a2e;
+            font-size: 13px;
+        }
+        .prem-item:last-child { border-bottom: none; }
+        .prem-item .info {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            flex: 1;
+            min-width: 0;
+        }
+        .prem-item .info .name { color: #b0b0d0; font-weight: 600; font-size: 13px; }
+        .prem-item .info .key {
+            font-family: 'Courier New', monospace;
+            color: #ff8800;
+            font-weight: 600;
+            letter-spacing: 1px;
+            font-size: 14px;
+            word-break: break-all;
+        }
+        .prem-item .info .expiry { color: #666699; font-size: 11px; }
+        .prem-item .info .expiry .valid { color: #00ff88; }
+        .prem-item .info .expiry .expired { color: #ff4466; }
+        .prem-item .info .expiry .time-left {
+            font-weight: 600;
+            font-family: 'Courier New', monospace;
+        }
+        .prem-item .actions {
+            display: flex;
+            gap: 6px;
+            flex-shrink: 0;
+            margin-left: 8px;
+        }
+        .prem-item .actions .btn-copy {
+            background: rgba(0, 212, 255, 0.1);
+            border: 1px solid #2a2a44;
+            color: #00d4ff;
+            padding: 4px 12px;
+            border-radius: 60px;
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+        .prem-item .actions .btn-copy:hover { background: rgba(0, 212, 255, 0.2); }
+        .prem-item .actions .btn-delete {
+            background: rgba(255, 68, 68, 0.1);
+            border: 1px solid #662222;
+            color: #ff4466;
+            padding: 4px 10px;
+            border-radius: 60px;
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+        .prem-item .actions .btn-delete:hover { background: rgba(255, 68, 68, 0.2); }
+        .empty-state { text-align: center; color: #444466; padding: 20px; font-size: 13px; }
+
+        .footer { text-align: center; color: #444466; font-size: 10px; margin-top: 16px; }
+
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1a1a2e;
+            color: #00ff88;
+            padding: 12px 28px;
+            border-radius: 60px;
+            font-size: 14px;
+            font-weight: 600;
+            border: 1px solid #226622;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.8);
+            z-index: 999;
+            transition: 0.3s;
+            backdrop-filter: blur(8px);
+            font-family: 'Segoe UI', sans-serif;
+            max-width: 90%;
+            text-align: center;
+        }
+        .toast.error { border-color: #662222; color: #ff4466; }
+        .toast.prem { border-color: #886622; color: #ff8800; }
+
+        @media (max-width: 460px) {
+            .admin-panel { padding: 16px; }
+            .create-prem .row { flex-direction: column; }
+            .create-prem .row input[type="text"] { width: 100%; }
+            .create-prem .row input[type="number"] { width: 100%; }
+            .create-prem .row .btn-gen,
+            .create-prem .row .btn-create,
+            .create-prem .row .btn-reset { width: 100%; justify-content: center; }
+            .prem-item { flex-direction: column; gap: 8px; align-items: stretch; }
+            .prem-item .actions { justify-content: flex-end; }
+            .free-section .free-key-display { flex-direction: column; gap: 8px; }
+            .free-section .free-key-display .copy-btn { width: 100%; text-align: center; }
+            .header h1 { font-size: 20px; }
+            .tabs .tab { font-size: 11px; padding: 8px; }
+        }
+    </style>
+</head>
+<body>
+<div class="admin-panel">
+    <div class="header">
+        <h1>🔐 ADMIN PRO V3</h1>
+        <div class="sub">Quản lý KEY FREE + KEY PREM</div>
+        <div class="badge-pro">⚡ PREM MANAGER</div>
+    </div>
+
+    <!-- FREE KEY -->
+    <div class="free-section">
+        <div class="title">🆓 KEY FREE HÔM NAY</div>
+        <div class="free-key-display">
+            <span class="key" id="freeKeyDisplay">------</span>
+            <button class="copy-btn" onclick="copyFreeKey()">📋 Sao chép</button>
+        </div>
+        <div class="free-expiry">
+            <span>⏳ Hết hạn vào lúc 00:00</span>
+            <span class="time" id="freeTimer">--:--:--</span>
+        </div>
+    </div>
+
+    <!-- TABS -->
+    <div class="tabs">
+        <div class="tab active" id="tabList" onclick="switchTab('list')">
+            📋 DANH SÁCH PREM
+            <span class="count-badge" id="premCountBadge">0</span>
+        </div>
+        <div class="tab" id="tabCreate" onclick="switchTab('create')">
+            ➕ TẠO PREM
+        </div>
+    </div>
+
+    <!-- DANH SÁCH PREM -->
+    <div id="panelList">
+        <div class="prem-list" id="premListContainer">
+            <div class="empty-state">Chưa có key PREM nào</div>
+        </div>
+        <div style="margin-top:8px;font-size:12px;color:#444466;text-align:right;" id="premCount">
+            Tổng: 0 key PREM
+        </div>
+    </div>
+
+    <!-- TẠO PREM -->
+    <div id="panelCreate" style="display:none;">
+        <div class="create-prem">
+            <div class="title">⭐ TẠO KEY PREM MỚI</div>
+            <div class="row">
+                <input type="text" id="premName" placeholder="Tên người dùng (VD: Hùng, Linh...)" maxlength="20">
+            </div>
+            <div class="row" style="margin-top:8px;">
+                <input type="text" id="premKeyInput" placeholder="Nhập key hoặc bấm Random..." maxlength="30">
+                <button class="btn-gen" onclick="generatePremKey()">🎲 Random</button>
+            </div>
+            <div class="row" style="margin-top:8px;">
+                <label>⏳ Hết hạn sau:</label>
+                <input type="number" id="premHours" value="72" min="1" max="9999">
+                <label>giờ</label>
+                <button class="btn-create" onclick="createPremKey()">✅ Tạo PREM</button>
+                <button class="btn-reset" onclick="clearForm()">↺ Xoá</button>
+            </div>
+        </div>
+        <div style="font-size:12px;color:#444466;">
+            ⚡ Key PREM sẽ được lưu và đồng bộ với LockCenter
+        </div>
+    </div>
+
+    <div class="footer">Chỉ dành cho người điều hành • FREE + PREM đồng bộ với LockCenter</div>
+</div>
+
+<script>
+    // ============================================================
+    // 1. KEY FREE
+    // ============================================================
+    function generateDailyKey(date) {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        const seed = parseInt(year + month + day);
+        let hash = 0;
+        let str = String(seed);
+        for (let i = 0; i < str.length; i++) {
+            const char = str.charCodeAt(i);
+            hash = ((hash << 5) - hash) + char;
+            hash = hash & hash;
+        }
+        let key = Math.abs(hash).toString(36).toUpperCase();
+        while (key.length < 8) { key = 'X' + key; }
+        key = key.slice(0, 8);
+        const daySuffix = String(date.getDate()).padStart(2, '0');
+        return key + daySuffix;
+    }
+
+    function getTodayFreeKey() {
+        return generateDailyKey(new Date());
+    }
+
+    function getFreeKeyExpiry() {
+        const now = new Date();
+        const tomorrow = new Date(now);
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        tomorrow.setHours(0, 0, 0, 0);
+        return tomorrow.getTime();
+    }
+
+    function formatTime(ms) {
+        if (ms <= 0) return 'Hết hạn';
+        const totalSec = Math.floor(ms / 1000);
+        const h = String(Math.floor(totalSec / 3600)).padStart(2, '0');
+        const m = String(Math.floor((totalSec % 3600) / 60)).padStart(2, '0');
+        const s = String(totalSec % 60).padStart(2, '0');
+        return `${h}:${m}:${s}`;
+    }
+
+    function updateFreeTimer() {
+        const remaining = getFreeKeyExpiry() - Date.now();
+        const timerEl = document.getElementById('freeTimer');
+        if (remaining > 0) {
+            timerEl.textContent = formatTime(remaining);
+            timerEl.style.color = '#00ff88';
+        } else {
+            timerEl.textContent = 'Đã hết hạn';
+            timerEl.style.color = '#ff4466';
+        }
+    }
+
+    // ============================================================
+    // 2. QUẢN LÝ DANH SÁCH PREM (ĐỒNG BỘ)
+    // ============================================================
+    function getPremList() {
+        const saved = localStorage.getItem('admin_prem_list');
+        if (!saved) return [];
+        try {
+            const list = JSON.parse(saved);
+            const valid = list.filter(item => item.expiry > Date.now());
+            if (valid.length !== list.length) {
+                localStorage.setItem('admin_prem_list', JSON.stringify(valid));
+            }
+            return valid;
+        } catch(e) {
+            localStorage.removeItem('admin_prem_list');
+            return [];
+        }
+    }
+
+    function savePremList(list) {
+        localStorage.setItem('admin_prem_list', JSON.stringify(list));
+        console.log('[Admin Pro V3] Đã lưu danh sách PREM:', list.length, 'keys');
+    }
+
+    function generatePremId() {
+        return 'PREM-' + Date.now().toString(36).toUpperCase() + '-' + Math.random().toString(36).substring(2, 6).toUpperCase();
+    }
+
+    function createPremKey() {
+        const name = document.getElementById('premName').value.trim() || 'Không tên';
+        let key = document.getElementById('premKeyInput').value.trim().toUpperCase();
+        if (!key) {
+            key = generatePremId();
+            document.getElementById('premKeyInput').value = key;
+        }
+        const hours = parseInt(document.getElementById('premHours').value) || 72;
+        const expiry = Date.now() + (hours * 60 * 60 * 1000);
+
+        const premList = getPremList();
+        if (premList.some(item => item.key.toUpperCase() === key)) {
+            showToast('⚠️ Key "' + key + '" đã tồn tại! Vui lòng tạo key khác.', 'error');
+            return;
+        }
+
+        const newPrem = {
+            id: generatePremId(),
+            name: name,
+            key: key,
+            expiry: expiry,
+            created: Date.now(),
+            hours: hours
+        };
+        premList.push(newPrem);
+        savePremList(premList);
+        renderPremList();
+        showToast('✅ Đã tạo key PREM cho "' + name + '": ' + key, 'prem');
+        document.getElementById('premKeyInput').value = '';
+        document.getElementById('premName').value = '';
+        console.log('[Admin Pro V3] Key PREM đã tạo:', key);
+    }
+
+    function deletePremKey(id) {
+        if (!confirm('Bạn có chắc muốn xoá key PREM này?')) return;
+        let list = getPremList();
+        list = list.filter(item => item.id !== id);
+        savePremList(list);
+        renderPremList();
+        showToast('🗑️ Đã xoá key PREM', 'success');
+    }
+
+    function copyPremKey(key) {
+        copyToClipboard(key, '✅ Đã sao chép key: ' + key);
+    }
+
+    function copyFreeKey() {
+        const key = getTodayFreeKey();
+        copyToClipboard(key, '✅ Đã sao chép key FREE: ' + key);
+    }
+
+    function copyToClipboard(text, msg) {
+        if (navigator.clipboard) {
+            navigator.clipboard.writeText(text).then(() => {
+                showToast(msg, 'success');
+            }).catch(() => fallbackCopy(text, msg));
+        } else {
+            fallbackCopy(text, msg);
+        }
+    }
+
+    function fallbackCopy(text, msg) {
+        const textarea = document.createElement('textarea');
+        textarea.value = text;
+        textarea.style.position = 'fixed';
+        textarea.style.opacity = '0';
+        document.body.appendChild(textarea);
+        textarea.select();
+        try {
+            document.execCommand('copy');
+            showToast(msg, 'success');
+        } catch (e) {
+            showToast('⚠️ Không thể sao chép', 'error');
+        }
+        document.body.removeChild(textarea);
+    }
+
+    function generatePremKey() {
+        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        let key = '';
+        for (let i = 0; i < 10; i++) {
+            key += chars.charAt(Math.floor(Math.random() * chars.length));
+        }
+        document.getElementById('premKeyInput').value = 'PREM-' + key;
+        showToast('🎲 Key random: PREM-' + key, 'prem');
+    }
+
+    function clearForm() {
+        document.getElementById('premKeyInput').value = '';
+        document.getElementById('premName').value = '';
+        document.getElementById('premHours').value = '72';
+    }
+
+    // ============================================================
+    // 3. HIỂN THỊ DANH SÁCH PREM
+    // ============================================================
+    function renderPremList() {
+        const list = getPremList();
+        const container = document.getElementById('premListContainer');
+        const count = document.getElementById('premCount');
+        const badge = document.getElementById('premCountBadge');
+
+        badge.textContent = list.length;
+        count.textContent = 'Tổng: ' + list.length + ' key PREM';
+
+        if (list.length === 0) {
+            container.innerHTML = '<div class="empty-state">Chưa có key PREM nào</div>';
+            return;
+        }
+
+        let html = '';
+        list.forEach(item => {
+            const remaining = item.expiry - Date.now();
+            const isValid = remaining > 0;
+            const timeStr = isValid ? formatTime(remaining) : 'Đã hết hạn';
+            const expiryDate = new Date(item.expiry).toLocaleString('vi-VN');
+
+            html += `
+                <div class="prem-item">
+                    <div class="info">
+                        <span class="name">👤 ${item.name || 'Không tên'}</span>
+                        <span class="key">${item.key}</span>
+                        <span class="expiry">
+                            ⏳ Còn: <span class="${isValid ? 'valid' : 'expired'} time-left">${timeStr}</span>
+                            &nbsp;|&nbsp; Hết: ${expiryDate}
+                        </span>
+                    </div>
+                    <div class="actions">
+                        <button class="btn-copy" onclick="copyPremKey('${item.key}')">📋</button>
+                        <button class="btn-delete" onclick="deletePremKey('${item.id}')">✕</button>
+                    </div>
+                </div>
+            `;
+        });
+
+        container.innerHTML = html;
+    }
+
+    // ============================================================
+    // 4. TAB SWITCH
+    // ============================================================
+    function switchTab(tab) {
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        if (tab === 'list') {
+            document.getElementById('tabList').classList.add('active');
+            document.getElementById('panelList').style.display = 'block';
+            document.getElementById('panelCreate').style.display = 'none';
+            renderPremList();
+        } else {
+            document.getElementById('tabCreate').classList.add('active');
+            document.getElementById('panelList').style.display = 'none';
+            document.getElementById('panelCreate').style.display = 'block';
+        }
+    }
+
+    // ============================================================
+    // 5. TOAST
+    // ============================================================
+    function showToast(msg, type = '') {
+        const old = document.querySelector('.toast');
+        if (old) old.remove();
+        const div = document.createElement('div');
+        div.className = 'toast' + (type === 'error' ? ' error' : type === 'prem' ? ' prem' : '');
+        div.textContent = msg;
+        document.body.appendChild(div);
+        setTimeout(() => { div.style.opacity = '0'; setTimeout(() => div.remove(), 400); }, 3000);
+    }
+
+    // ============================================================
+    // 6. TỰ ĐỘNG CẬP NHẬT
+    // ============================================================
+    function refreshAll() {
+        document.getElementById('freeKeyDisplay').textContent = getTodayFreeKey();
+        updateFreeTimer();
+        renderPremList();
+    }
+
+    // ============================================================
+    // 7. KHỞI TẠO
+    // ============================================================
+    window.onload = function() {
+        refreshAll();
+        setInterval(updateFreeTimer, 1000);
+        setInterval(renderPremList, 10000);
+        console.log('[Admin Pro V3] Đã sẵn sàng!');
+        console.log('[Admin Pro V3] Key FREE hôm nay:', getTodayFreeKey());
+        console.log('[Admin Pro V3] Số key PREM:', getPremList().length);
+    };
+
+    // ============================================================
+    // 8. EXPOSE
+    // ============================================================
+    window.switchTab = switchTab;
+    window.createPremKey = createPremKey;
+    window.generatePremKey = generatePremKey;
+    window.deletePremKey = deletePremKey;
+    window.copyPremKey = copyPremKey;
+    window.copyFreeKey = copyFreeKey;
+    window.clearForm = clearForm;
+    window.getPremList = getPremList;
+    window.getTodayFreeKey = getTodayFreeKey;
+</script>
+</body>
+</html>
